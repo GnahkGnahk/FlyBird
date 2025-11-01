@@ -9,6 +9,7 @@
   Contact2DType,
   IPhysics2DContact,
   ParticleSystem2D,
+  AnimationState,
 } from "cc";
 const { ccclass, property } = _decorator;
 
@@ -25,6 +26,9 @@ export class Bird extends Component {
   private particleDie: ParticleSystem2D;
 
   public birdAnimation: Animation;
+
+  @property(Animation)
+  public explosiveAnimation: Animation;
   public birdLocation: Vec3;
 
   public hitSomeThing: boolean = false;
@@ -35,10 +39,24 @@ export class Bird extends Component {
     if (collider) {
       collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
     }
+
+    if (this.explosiveAnimation) {
+      this.explosiveAnimation.on(
+        Animation.EventType.FINISHED,
+        this.onAnimationFinished,
+        this
+      );
+    }
   }
 
   update(deltaTime: number) {
     //this.fall(deltaTime);
+  }
+
+  onAnimationFinished(type: string, state: AnimationState) {
+    console.log(`🎬 Animation "${state.name}" FINISHED`);
+
+    GameController.instance.gameOver();
   }
 
   onBeginContact(
@@ -47,8 +65,8 @@ export class Bird extends Component {
     contact: IPhysics2DContact | null
   ) {
     console.log(`Bird hit : ${otherCollider.node.name}`);
-	this.particleDie.resetSystem();
-    //GameController.instance.gameOver();
+    //this.particleDie.resetSystem();
+    this.explosiveAnimation.play();
   }
 
   onLoad() {

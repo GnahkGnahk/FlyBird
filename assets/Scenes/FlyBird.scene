@@ -1774,6 +1774,9 @@
     "particleDie": {
       "__id__": 64
     },
+    "explosiveAnimation": {
+      "__id__": 71
+    },
     "_id": "e5x2VOOgZIjqYevnEBjP4n"
   },
   {
@@ -1794,16 +1797,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 71
+        "__id__": 72
       },
       {
-        "__id__": 73
+        "__id__": 74
       },
       {
         "__id__": 59
-      },
-      {
-        "__id__": 75
       },
       {
         "__id__": 76
@@ -2031,7 +2031,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Sprite",
+    "_name": "Explosive",
     "_objFlags": 0,
     "_parent": {
       "__id__": 60
@@ -2044,13 +2044,16 @@
       },
       {
         "__id__": 69
+      },
+      {
+        "__id__": 71
       }
     ],
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -56.462,
-      "y": -0.714,
+      "x": 0,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
@@ -2088,8 +2091,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 69,
-      "height": 72
+      "width": 50,
+      "height": 50
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2124,13 +2127,10 @@
       "b": 255,
       "a": 255
     },
-    "_spriteFrame": {
-      "__uuid__": "394d34b8-ff7b-423d-88dc-aaa91fd86321@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -2151,6 +2151,28 @@
     "fileId": "e71ctEmpxFC4KlSYRZNz/a"
   },
   {
+    "__type__": "cc.Animation",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 66
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "playOnLoad": false,
+    "_clips": [
+      {
+        "__uuid__": "901318e3-a22b-4916-9a78-a3aa2d1dbac2",
+        "__expectedType__": "cc.AnimationClip"
+      }
+    ],
+    "_defaultClip": {
+      "__uuid__": "901318e3-a22b-4916-9a78-a3aa2d1dbac2",
+      "__expectedType__": "cc.AnimationClip"
+    },
+    "_id": "fcmEfGvJBElaAE4vtZjU8d"
+  },
+  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -2159,7 +2181,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 72
+      "__id__": 73
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -2186,7 +2208,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 74
+      "__id__": 75
     },
     "_visFlags": 0,
     "_customMaterial": null,
@@ -2243,33 +2265,6 @@
       "__expectedType__": "cc.AnimationClip"
     },
     "_id": "6fvxA5zVpGeqpev82I8eKf"
-  },
-  {
-    "__type__": "cc.RigidBody2D",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 60
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "enabledContactListener": true,
-    "bullet": false,
-    "awakeOnLoad": true,
-    "_group": 1,
-    "_type": 2,
-    "_allowSleep": true,
-    "_gravityScale": 2.3,
-    "_linearDamping": 2,
-    "_angularDamping": 0,
-    "_linearVelocity": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_angularVelocity": 0,
-    "_fixedRotation": true,
-    "_id": "d9DgVuw8NNO7qEq5IkcU+g"
   },
   {
     "__type__": "cc.CircleCollider2D",
