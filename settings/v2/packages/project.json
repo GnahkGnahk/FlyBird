@@ -1,0 +1,24 @@
+{
+  "__version__": "1.0.1",
+  "script": {
+    "useDefineForClassFields": false,
+    "allowDeclareFields": false
+  },
+  "general": {
+    "designResolution": {
+      "width": 640,
+      "height": 960,
+      "fitWidth": false
+    }
+  },
+  "layer": [
+    {
+      "name": "Player",
+      "value": 1
+    },
+    {
+      "name": "Obstacle",
+      "value": 2
+    }
+  ]
+}

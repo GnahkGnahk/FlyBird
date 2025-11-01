@@ -1,0 +1,66 @@
+[
+  {
+    "__type__": "cc.AnimationClip",
+    "_name": "birdAnimation",
+    "_objFlags": 0,
+    "_native": "",
+    "sample": 60,
+    "speed": 1,
+    "wrapMode": 1,
+    "events": [],
+    "enableTrsBlending": false,
+    "_duration": 0.5166666666666667,
+    "_keys": [
+      [
+        0,
+        0.1,
+        0.2,
+        0.3333333333333333,
+        0.5
+      ]
+    ],
+    "_stepness": 0,
+    "_curves": [
+      {
+        "modifiers": [
+          {
+            "__id__": 1
+          },
+          "spriteFrame"
+        ],
+        "data": {
+          "keys": 0,
+          "values": [
+            {
+              "__uuid__": "25ef01dc-2bc7-4646-9eac-4d1519385651@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "2a9b5620-78bf-442d-9f8a-31d58d4e55fc@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "54495175-319a-4dcf-b04c-ee5b56e76b7f@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "2a9b5620-78bf-442d-9f8a-31d58d4e55fc@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "25ef01dc-2bc7-4646-9eac-4d1519385651@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            }
+          ],
+          "easingMethods": {}
+        }
+      }
+    ],
+    "_commonTargets": [],
+    "_hash": 826031221
+  },
+  {
+    "__type__": "cc.animation.ComponentPath",
+    "component": "cc.Sprite"
+  }
+]
