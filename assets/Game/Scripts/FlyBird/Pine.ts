@@ -1,4 +1,4 @@
-﻿import { _decorator, Component, Node, CCInteger, view, math } from "cc";
+﻿import { _decorator, Component, Node, CCInteger, view, math, log } from "cc";
 const { ccclass, property } = _decorator;
 
 import { GameController } from "./GameController";
@@ -27,24 +27,31 @@ export class Pine extends Component {
   tempDifficultMoveSpeed: number = 0;
   tempDifficultGap: number = 0;
 
-  start() {
+  public setUpAll() {
+    console.log("Set up all");
+    
+    this.setUpPinesDifficult();
+    this.setUpPine();
+  }
+
+  setUpPinesDifficult() {
+    console.log("________setUpPinesDifficult");
+    this.addedPoint = false;
     this.tempDifficultMoveSpeed =
       GameController.instance.difficult_pineMoveSpeed;
     this.tempDifficultGap = GameController.instance.difficult_gapPines;
     this.tempCurrentScore =
       GameController.instance.resultController.currentScore;
+    this.tempDifficultGap *= this.tempCurrentScore;
 
-    this.tempDifficultGap *= this.tempCurrentScore; //  Difficult
     let tempMin = this.gapHeightMax - this.tempCurrentScore;
     if (tempMin <= this.gapHeightMin) {
       tempMin = this.gapHeightMin;
     }
-
     this.currentGap = tempMin;
-    this.initPine();
   }
 
-  initPine() {
+  setUpPine() {
     const screenHeight = view.getVisibleSize().height;
     const minY = -screenHeight / 4;
 
@@ -60,21 +67,26 @@ export class Pine extends Component {
     //console.log("Pine : " + this.node.position);
   }
 
-  added: boolean = false;
+  addedPoint: boolean = false;
   update(deltaTime: number) {
     let tempMoveSpeed = this.moveSpeed * this.tempDifficultMoveSpeed; //  Difficult
     const newPos = this.node.position.add3f(-tempMoveSpeed * deltaTime, 0, 0);
     this.node.setPosition(newPos);
     // this.node.setPosition(this.node.position.x - this.moveSpeed * deltaTime, 0, 0);
 
-    if (this.node.position.x <= 0.1 && !this.added) {
-      this.added = true;
+    if (this.node.position.x <= 0.1 && !this.addedPoint) {
+      this.addedPoint = true;
       GameController.instance.resultController.updateScore(1);
     }
 
     if (this.node.position.x <= -400) {
       // console.log("Destroy Pine:", pos);
-      this.node.destroy();
+      GameController.instance.despawnPine(this);
     }
+  }
+
+  protected onLoad(): void {
+    console.log("_________On load Pine");
+    
   }
 }

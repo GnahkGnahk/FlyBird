@@ -19,6 +19,8 @@ import { SingletonBase } from "./SingletonBase";
 import { GroundController } from "./GroundController";
 import { ResultController } from "./ResultController";
 import { Bird } from "./Bird";
+import { ObjectPool } from "./ObjectPool";
+import { Pine } from "./Pine";
 
 @ccclass("GameController")
 export class GameController extends SingletonBase<GameController> {
@@ -59,6 +61,20 @@ export class GameController extends SingletonBase<GameController> {
   public minInterval = 0.5;
   //    } DIFFICULT
 
+  public pinePool!: ObjectPool<Pine>;
+
+  onLoad(): void {
+    super.onLoad();
+    console.log("_______On load GController");
+
+    this.pinePool = new ObjectPool<Pine>(() => {
+      const node = instantiate(this.pinePrefab);
+      return node.getComponent(Pine)!;
+    }, 10);
+
+    console.log("_____Done create pool");
+  }
+
   start() {
     this.initListener();
     this.resultController.hideResult();
@@ -89,6 +105,7 @@ export class GameController extends SingletonBase<GameController> {
       case macro.KEY.f: // Bird fly
         console.log("Bird Fly!");
         this.bird.fly();
+        this.startGame = true;
         break;
     }
   }
@@ -99,19 +116,28 @@ export class GameController extends SingletonBase<GameController> {
     director.pause();
   }
 
+  startGame: boolean = false;
   update(deltaTime: number) {
+    if (!this.startGame) {
+      return;
+    }
     this.spawnTimer += deltaTime;
 
     const currentScore = this.resultController.currentScore;
     const newInterval = Math.max(
       this.minInterval,
-      1 - currentScore * this.difficult_spawnPineInterval
+      5 - currentScore * this.difficult_spawnPineInterval
     );
     this.spawnInterval = newInterval;
 
     // Spawn pine
     if (this.spawnTimer >= this.spawnInterval) {
       this.spawnTimer = 0;
+      console.log(
+        "[Spawn] Triggered - Interval:",
+        this.spawnInterval.toFixed(2)
+      );
+
       this.spawnPine();
     }
   }
@@ -122,13 +148,30 @@ export class GameController extends SingletonBase<GameController> {
       return;
     }
 
-    //console.log("Spawn Pine!");
-    const newPine = instantiate(this.pinePrefab);
+    // //console.log("Spawn Pine!");
+    // const newPine = instantiate(this.pinePrefab);
+    // const screenWidth = view.getVisibleSize().width;
+    // //console.log("Screen Width: " + screenWidth);
+    // newPine.setPosition(new Vec3(400, 0, 0));
+    // this.pineHolder.addChild(newPine);
 
-    const screenWidth = view.getVisibleSize().width;
-    //console.log("Screen Width: " + screenWidth);
+    // Get objec from pool instead instantiate
+    const pine = this.pinePool.get();
+    
+    const node = pine.node;
+    node.setParent(this.pineHolder);
+    node.setPosition(new Vec3(400, 0, 0));
+    node.active = true;
+    console.log("_____set parent done");
+    
 
-    newPine.setPosition(new Vec3(400, 0, 0));
-    this.pineHolder.addChild(newPine);
+    pine.setUpAll();
+  }
+
+  despawnPine(pine: Pine) {
+    const node = pine.node;
+    node.active = false;
+    node.removeFromParent();
+    this.pinePool.release(pine);
   }
 }
