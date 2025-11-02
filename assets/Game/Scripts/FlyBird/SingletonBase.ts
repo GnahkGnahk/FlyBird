@@ -14,9 +14,7 @@ export class SingletonBase<T> extends Component {
     return this._instance;
   }
 
-  onLoad() {
-    console.log("_______On load Singleton");
-    
+  onLoad() {    
     const ctor = this.constructor as any;
 
     if (!ctor._instance) {

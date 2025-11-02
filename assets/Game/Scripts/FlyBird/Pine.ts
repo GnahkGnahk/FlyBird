@@ -28,14 +28,12 @@ export class Pine extends Component {
   tempDifficultGap: number = 0;
 
   public setUpAll() {
-    console.log("Set up all");
     
     this.setUpPinesDifficult();
     this.setUpPine();
   }
 
   setUpPinesDifficult() {
-    console.log("________setUpPinesDifficult");
     this.addedPoint = false;
     this.tempDifficultMoveSpeed =
       GameController.instance.difficult_pineMoveSpeed;
@@ -64,7 +62,7 @@ export class Pine extends Component {
     this.pineBot.setPosition(this.pineBot.position.x, bottomY, 0);
     this.pineTop.setPosition(this.pineTop.position.x, topY, 0);
 
-    //console.log("Pine : " + this.node.position);
+    //console.log("____Pine : " + this.node.position);
   }
 
   addedPoint: boolean = false;
@@ -80,7 +78,6 @@ export class Pine extends Component {
     }
 
     if (this.node.position.x <= -400) {
-      // console.log("Destroy Pine:", pos);
       GameController.instance.despawnPine(this);
     }
   }

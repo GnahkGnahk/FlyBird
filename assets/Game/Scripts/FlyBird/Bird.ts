@@ -23,13 +23,13 @@ export class Bird extends Component {
   public jumpDuration: number = 3.5;
 
   @property(ParticleSystem2D)
-  private particleDie: ParticleSystem2D;
+  private particleDie!: ParticleSystem2D;
 
-  public birdAnimation: Animation;
+  public birdAnimation!: Animation;
 
   @property(Animation)
-  public explosiveAnimation: Animation;
-  public birdLocation: Vec3;
+  public explosiveAnimation!: Animation;
+  public birdLocation!: Vec3;
 
   public hitSomeThing: boolean = false;
 
@@ -54,7 +54,7 @@ export class Bird extends Component {
   }
 
   onAnimationFinished(type: string, state: AnimationState) {
-    console.log(`🎬 Animation "${state.name}" FINISHED`);
+    console.log(`____🎬 Animation "${state.name}" FINISHED`);
 
     GameController.instance.gameOver();
   }
@@ -64,7 +64,7 @@ export class Bird extends Component {
     otherCollider: Collider2D,
     contact: IPhysics2DContact | null
   ) {
-    console.log(`Bird hit : ${otherCollider.node.name}`);
+    console.log(`____Bird hit : ${otherCollider.node.name}`);
     //this.particleDie.resetSystem();
     this.explosiveAnimation.play();
   }
