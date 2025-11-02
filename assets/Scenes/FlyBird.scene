@@ -1252,10 +1252,10 @@
     "_string": "0",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 50,
-    "_fontSize": 50,
+    "_actualFontSize": 60,
+    "_fontSize": 60,
     "_fontFamily": "Arial",
-    "_lineHeight": 40,
+    "_lineHeight": 60,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": {
@@ -1290,7 +1290,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -98.65,
+      "x": 0,
       "y": 360,
       "z": 0
     },
@@ -1327,8 +1327,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 26.56,
-      "height": 50.4
+      "width": 31.88,
+      "height": 75.6
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

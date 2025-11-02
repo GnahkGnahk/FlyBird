@@ -50,7 +50,7 @@ export class Bird extends Component {
   }
 
   update(deltaTime: number) {
-    //this.fall(deltaTime);
+    this.fall(deltaTime);
   }
 
   onAnimationFinished(type: string, state: AnimationState) {
