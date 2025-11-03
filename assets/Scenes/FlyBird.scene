@@ -57,13 +57,13 @@
         "__id__": 79
       },
       {
-        "__id__": 58
-      },
-      {
         "__id__": 49
       },
       {
         "__id__": 45
+      },
+      {
+        "__id__": 58
       }
     ],
     "_active": true,
@@ -594,6 +594,7 @@
       "__id__": 18
     },
     "_enabled": true,
+    "__prefab": null,
     "groundController": {
       "__id__": 20
     },
@@ -1194,6 +1195,7 @@
       "__id__": 43
     },
     "_enabled": true,
+    "__prefab": null,
     "currentScoreLabel": {
       "__id__": 44
     },
@@ -1730,6 +1732,7 @@
       "__id__": 58
     },
     "_enabled": true,
+    "__prefab": null,
     "jumpHeight": 3.5,
     "jumpDuration": 3.5,
     "particleDie": {
@@ -2258,6 +2261,7 @@
       "__id__": 77
     },
     "_enabled": true,
+    "__prefab": null,
     "item": {
       "__id__": 79
     },
