@@ -35,11 +35,11 @@ export class GroundController extends Component {
 
 
   onLoad() {
-    this.groundWidth = this.ground1.getComponent(UITransform).width;
+    this.groundWidth = this.ground1.getComponent(UITransform)!.width;
     console.log("Ground Width: " + this.groundWidth);
 
-    this.bgSprite1 = this.ground1.getComponent(Sprite);
-    this.bgSprite2 = this.ground2.getComponent(Sprite);
+    this.bgSprite1 = this.ground1.getComponent(Sprite)!;
+    this.bgSprite2 = this.ground2.getComponent(Sprite)!;
   }
 
   start() {

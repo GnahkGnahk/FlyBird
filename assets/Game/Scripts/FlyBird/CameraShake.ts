@@ -3,10 +3,10 @@ const { ccclass, property } = _decorator;
 
 @ccclass("CameraShake")
 export class CameraShake extends Component {
-  @property({ type: CCFloat, tooltip: "Độ mạnh rung (pixel)" })
+  @property({ type: CCFloat, tooltip: "Default Intensity Shaking camera" })
   public defaultIntensity: number = 10;
 
-  @property({ type: CCFloat, tooltip: "Thời gian rung (giây)" })
+  @property({ type: CCFloat, tooltip: "Default duration shaking camera" })
   public defaultDuration: number = 0.3;
 
   private originalPos: Vec3 = new Vec3();
@@ -17,12 +17,12 @@ export class CameraShake extends Component {
   }
 
   /**
-   * Rung camera trong thời gian ngắn
-   * @param duration (optional) thời gian rung
-   * @param intensity (optional) độ mạnh rung
+   * Shake camera
+   * @param duration (optional) duration shake
+   * @param intensity (optional) intensity shake
    */
   public shake(duration?: number, intensity?: number) {
-    // Nếu đang rung thì bỏ qua để không rung chồng
+    //  if shaking , skip
     if (this.isShaking) return;
     this.isShaking = true;
 
@@ -46,7 +46,7 @@ export class CameraShake extends Component {
 
     sequence.call(() => {
       this.isShaking = false;
-      this.node.setPosition(this.originalPos); // đảm bảo reset vị trí
+      this.node.setPosition(this.originalPos); // make sure original position
     });
 
     sequence.start();

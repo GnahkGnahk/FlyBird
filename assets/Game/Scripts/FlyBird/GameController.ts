@@ -147,8 +147,12 @@ export class GameController extends SingletonBase<GameController> {
   }
 
   loadPineData() {
-    this.pineDataList = this.pineDataAsset.json;
-    //console.log("_____ Loaded Pine Data:", this.pineDataList);
+    if (this.pineDataAsset && this.pineDataAsset.json) {
+      this.pineDataList = this.pineDataAsset.json as any[];
+    } else {
+      console.warn("Pine data asset is missing or invalid!");
+      this.pineDataList = [];
+    }
   }
 
   gameOver() {
