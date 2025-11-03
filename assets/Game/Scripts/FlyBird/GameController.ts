@@ -12,6 +12,8 @@
   instantiate,
   Vec3,
   view,
+  resources,
+  JsonAsset,
 } from "cc";
 const { ccclass, property } = _decorator;
 
@@ -42,6 +44,9 @@ export class GameController extends SingletonBase<GameController> {
   @property(CCInteger)
   pineSpeed: number = 200;
 
+  @property(JsonAsset)
+  pineDataAsset: JsonAsset = null!;
+
   //    DIFFICULT {
   @property({
     type: CCInteger,
@@ -63,6 +68,8 @@ export class GameController extends SingletonBase<GameController> {
 
   public pinePool!: ObjectPool<Pine>;
 
+  public pineDataList: any[] = [];
+
   onLoad(): void {
     super.onLoad();
 
@@ -70,11 +77,13 @@ export class GameController extends SingletonBase<GameController> {
       const node = instantiate(this.pinePrefab);
       return node.getComponent(Pine)!;
     }, 10);
+
+    this.loadPineData();
   }
 
   start() {
     this.initListener();
-    this.resultController.hideResult();
+    //this.resultController.hideResult();
   }
 
   initListener() {
@@ -86,32 +95,44 @@ export class GameController extends SingletonBase<GameController> {
       case macro.KEY.g: // Game Over
         this.gameOver();
         break;
-
       case macro.KEY.p: // Add score
         this.resultController.updateScore(1);
         break;
-
       case macro.KEY.r: // Reset score
-        this.resultController.hideResult();
-        this.resultController.updateScore(0);
-        director.resume();
-        this.bird.resetBird();
-        this.pineHolder.destroyAllChildren();
         break;
       case macro.KEY.f: // Bird fly
-        this.bird.fly();
-        this.startGame = true;
+        if (!this.startGame) {
+          //this.resultController.hideResult();
+          this.resultController.updateScore(0);
+          director.resume();
+          this.bird.resetBird();
+          this.pineHolder.destroyAllChildren();
+          this.startGame = true;
+          this.isCustomMap = false
+          this.count = 0;
+        } else {
+          this.bird.fly();
+          this.startGame = true;
+        }
+
+        this.resultController.hideResult();
         break;
     }
+  }
+
+  loadPineData() {
+    this.pineDataList = this.pineDataAsset.json;
+    console.log("_____ Loaded Pine Data:", this.pineDataList);
   }
 
   gameOver() {
     console.log("____Game Over!");
     this.resultController.showResult("Game Over");
+    this.startGame = false;
     director.pause();
   }
 
-  startGame: boolean = false;
+  public startGame: boolean = false;
   update(deltaTime: number) {
     if (!this.startGame) {
       return;
@@ -132,18 +153,15 @@ export class GameController extends SingletonBase<GameController> {
     }
   }
 
+  count: number = 0;
+  public swapPoint: number = 5;
+  public isCustomMap: boolean = false;
+
   spawnPine() {
     if (!this.pinePrefab) {
       console.warn("____Pine prefab is not assigned!");
       return;
     }
-
-    // //console.log("____Spawn Pine!");
-    // const newPine = instantiate(this.pinePrefab);
-    // const screenWidth = view.getVisibleSize().width;
-    // //console.log("____Screen Width: " + screenWidth);
-    // newPine.setPosition(new Vec3(400, 0, 0));
-    // this.pineHolder.addChild(newPine);
 
     // Get objec from pool instead instantiate
     const pine = this.pinePool.get();
@@ -153,7 +171,16 @@ export class GameController extends SingletonBase<GameController> {
     node.setPosition(new Vec3(400, 0, 0));
     node.active = true;
 
-    pine.setUpAll();
+    if (this.isCustomMap && this.pineDataList && this.pineDataList.length > 0) {
+      const data = this.pineDataList[this.count];
+      console.log("_____Custom data : " + data);
+      
+      pine.setUpAll(data);
+      this.count = (this.count + 1) % this.pineDataList.length;     
+    } 
+    else {
+      pine.setUpAll();
+    }
   }
 
   despawnPine(pine: Pine) {
@@ -161,5 +188,9 @@ export class GameController extends SingletonBase<GameController> {
     node.active = false;
     node.removeFromParent();
     this.pinePool.release(pine);
+  }
+
+  public swapDayNight() {
+    this.groundController.swapDayNight();
   }
 }

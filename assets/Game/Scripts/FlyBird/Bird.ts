@@ -14,6 +14,7 @@
 const { ccclass, property } = _decorator;
 
 import { GameController } from "./GameController";
+import { Utils } from "./Utils";
 
 @ccclass("Bird")
 export class Bird extends Component {
@@ -47,9 +48,14 @@ export class Bird extends Component {
         this
       );
     }
+
+    this.runCoroutine(0.5);
   }
 
   update(deltaTime: number) {
+    if (!GameController.instance.startGame) {
+      return;
+    }
     this.fall(deltaTime);
   }
 
@@ -98,5 +104,12 @@ export class Bird extends Component {
     const pos = this.node.position.clone();
     pos.y -= this.fallSpeed * deltaTime; // rơi xuống
     this.node.setPosition(pos);
+  }
+
+  async runCoroutine(time: number = 1) {
+    while (!GameController.instance.startGame) {
+      await Utils.wait(time);
+      this.birdAnimation.play();
+    }
   }
 }

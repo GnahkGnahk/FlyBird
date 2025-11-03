@@ -27,14 +27,36 @@ export class Pine extends Component {
   tempDifficultMoveSpeed: number = 0;
   tempDifficultGap: number = 0;
 
-  public setUpAll() {
-    
-    this.setUpPinesDifficult();
-    this.setUpPine();
+  rotationTop: number = 0;
+  rotationBot: number = 0;
+
+  public setUpAll(): void;
+  public setUpAll(data: any): void;
+
+  // public setUpAll() {
+  //   this.setUpPinesDifficult();
+  //   this.setUpPine();
+  // }
+
+  public setUpAll(data?: any): void {
+    if (data) {
+      //  custom
+      //this.moveSpeed = data.moveSpeed ?? 10;
+      this.currentGap = data.gap ?? 200;
+      this.rotationTop = data.rotationTop ?? 0;
+      this.rotationBot = data.rotationBot ?? 0;
+    } else {
+      // default
+      this.setUpPinesDifficult();
+      this.rotationTop = 0;
+      this.rotationBot = 0;
+    }
+
+    this.setUpPine();    
+    this.addedPoint = false;
   }
 
   setUpPinesDifficult() {
-    this.addedPoint = false;
     this.tempDifficultMoveSpeed =
       GameController.instance.difficult_pineMoveSpeed;
     this.tempDifficultGap = GameController.instance.difficult_gapPines;
@@ -58,11 +80,13 @@ export class Pine extends Component {
     // Tính vị trí ống trên dựa theo khoảng gap
     const topY = bottomY + this.currentGap;
 
-    // Cập nhật vị trí cho 2 ống
+    //  position
     this.pineBot.setPosition(this.pineBot.position.x, bottomY, 0);
     this.pineTop.setPosition(this.pineTop.position.x, topY, 0);
 
-    //console.log("____Pine : " + this.node.position);
+    //  rotation
+    this.pineBot.setRotationFromEuler(0, 0, this.rotationBot);
+    this.pineTop.setRotationFromEuler(0, 0, this.rotationTop);
   }
 
   addedPoint: boolean = false;
@@ -84,6 +108,5 @@ export class Pine extends Component {
 
   protected onLoad(): void {
     console.log("_________On load Pine");
-    
   }
 }
