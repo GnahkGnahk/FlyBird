@@ -108,8 +108,7 @@ export class GameController extends SingletonBase<GameController> {
           this.bird.resetBird();
           this.pineHolder.destroyAllChildren();
           this.startGame = true;
-          this.isCustomMap = false
-          this.count = 0;
+          this.isCustomMap = false;
         } else {
           this.bird.fly();
           this.startGame = true;

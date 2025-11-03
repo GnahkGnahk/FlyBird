@@ -1,7 +1,9 @@
 [
+  { "moveSpeed": 10, "gap": 250, "rotationTop": -5, "rotationBot": 5 },
   { "moveSpeed": 10, "gap": 250, "rotationTop": 7, "rotationBot": 15 },
   { "moveSpeed": 12, "gap": 220, "rotationTop": -5, "rotationBot": 3 },
-  { "moveSpeed": 14, "gap": 180, "rotationTop": 10, "rotationBot": -8 },
   { "moveSpeed": 16, "gap": 200, "rotationTop": 0, "rotationBot": 0 },
+  { "moveSpeed": 14, "gap": 180, "rotationTop": 10, "rotationBot": -8 },
+  { "moveSpeed": 16, "gap": 200, "rotationTop": -10, "rotationBot": 10 },
   { "moveSpeed": 18, "gap": 150, "rotationTop": -12, "rotationBot": 15 }
 ]

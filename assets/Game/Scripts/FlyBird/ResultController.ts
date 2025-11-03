@@ -1,4 +1,4 @@
-﻿import { _decorator, Component, Node, Label } from "cc";
+﻿import { _decorator, Component, Node, Label, sys } from "cc";
 import { GameController } from "./GameController";
 const { ccclass, property } = _decorator;
 
@@ -18,7 +18,10 @@ export class ResultController extends Component {
 
   onLoad() {}
 
-  start() {}
+  start() {
+    const high = this.getHighScore();
+    this.highScoreLabel.string = "High score: " + high;
+  }
 
   updateScore(score: number) {
     if (score == 0) {
@@ -40,6 +43,7 @@ export class ResultController extends Component {
     if (this.currentScore > this.maxScore) {
       this.maxScore = this.currentScore;
       this.highScoreLabel.string = "New high score: " + this.maxScore;
+      this.saveHighScore(this.currentScore);
     } else {
       this.highScoreLabel.string = "High score: " + this.maxScore;
     }
@@ -51,5 +55,14 @@ export class ResultController extends Component {
 
   hideResult() {
     this.notiPanel.active = false;
+  }
+
+  saveHighScore(score: number) {
+    sys.localStorage.setItem("highScore", score.toString());
+  }
+
+  getHighScore(): number {
+    const value = sys.localStorage.getItem("highScore");
+    return value ? parseInt(value) : 0;
   }
 }

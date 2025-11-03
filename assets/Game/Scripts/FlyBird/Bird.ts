@@ -97,6 +97,14 @@ export class Bird extends Component {
   private gravity: number = 1000; // tốc độ rơi tăng dần mỗi giây
 
   fall(deltaTime: number) {
+    if (this.fallSpeed < -1) {
+      this.node.setRotationFromEuler(0, 0, 10); //  up
+    } else if (this.fallSpeed > 1) {
+      this.node.setRotationFromEuler(0, 0, -20);  // down
+    } else {
+      this.node.setRotationFromEuler(0, 0, 0);  //  balance
+    }
+
     // tăng dần tốc độ rơi theo thời gian (giả lập trọng lực)
     this.fallSpeed += this.gravity * deltaTime;
 
