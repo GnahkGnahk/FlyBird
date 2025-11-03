@@ -13,6 +13,7 @@
   Vec3,
   view,
   JsonAsset,
+  EventTouch,
 } from "cc";
 const { ccclass, property } = _decorator;
 
@@ -92,16 +93,35 @@ export class GameController extends SingletonBase<GameController> {
 
   initListener() {
     systemEvent.on(SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+
+    this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this);
+  }
+
+  private onTouchStart(event: EventTouch | null) {
+    if (!this.startGame) {
+      //this.resultController.hideResult();
+      this.resultController.updateScore(0);
+      director.resume();
+      this.bird.resetBird();
+      this.pineHolder.destroyAllChildren();
+      this.startGame = true;
+      this.isCustomMap = false;
+    } else {
+      this.bird.fly();
+      this.startGame = true;
+    }
+
+    this.resultController.hideResult();
   }
 
   onKeyDown(event: EventKeyboard) {
     switch (event.keyCode) {
-      case macro.KEY.g: // Game Over
-        this.gameOver();
-        break;
-      case macro.KEY.p: // Add score
-        this.resultController.updateScore(1);
-        break;
+      // case macro.KEY.g: // Game Over
+      //   this.gameOver();
+      //   break;
+      // case macro.KEY.p: // Add score
+      //   this.resultController.updateScore(1);
+      //   break;
       case macro.KEY.r: // Reset score
         break;
       case macro.KEY.f: // Bird fly
@@ -221,7 +241,7 @@ export class GameController extends SingletonBase<GameController> {
     this.bird.activeImmortalEffect(active);
   }
 
-  public getImmortalDuration(): number{
+  public getImmortalDuration(): number {
     return this.itemController.immortalDuration;
   }
 }

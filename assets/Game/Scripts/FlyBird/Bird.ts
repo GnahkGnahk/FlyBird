@@ -11,6 +11,7 @@
   ParticleSystem2D,
   AnimationState,
   Layers,
+  view,
 } from "cc";
 const { ccclass, property } = _decorator;
 
@@ -41,6 +42,8 @@ export class Bird extends Component {
 
   gameControllerIns!: GameController;
 
+  halfScreen!: number;
+
   start() {
     this.gameControllerIns = GameController.instance;
     const collider = this.getComponent(Collider2D);
@@ -60,6 +63,9 @@ export class Bird extends Component {
     this.runCoroutine(0.5);
 
     this.particleDie.duration = this.gameControllerIns.getImmortalDuration();
+
+    const screenHeight = view.getVisibleSize().height;
+    this.halfScreen = screenHeight / 2;
   }
 
   update(deltaTime: number) {
@@ -105,7 +111,6 @@ export class Bird extends Component {
     this.node.setPosition(this.birdLocation);
     this.hitSomeThing = false;
     this.fallSpeed = 0;
-
   }
 
   fly() {
@@ -119,19 +124,29 @@ export class Bird extends Component {
 
   fall(deltaTime: number) {
     if (this.fallSpeed < -1) {
-      this.node.setRotationFromEuler(0, 0, 10); //  up
+      this.node.setRotationFromEuler(0, 0, 10);
     } else if (this.fallSpeed > 1) {
-      this.node.setRotationFromEuler(0, 0, -20); // down
+      this.node.setRotationFromEuler(0, 0, -20);
     } else {
-      this.node.setRotationFromEuler(0, 0, 0); //  balance
+      this.node.setRotationFromEuler(0, 0, 0);
     }
 
-    // tăng dần tốc độ rơi theo thời gian (giả lập trọng lực)
     this.fallSpeed += this.gravity * deltaTime;
 
-    // cập nhật vị trí mới dựa trên tốc độ hiện tại
     const pos = this.node.position.clone();
-    pos.y -= this.fallSpeed * deltaTime; // rơi xuống
+    pos.y -= this.fallSpeed * deltaTime;
+
+    const topBound = this.halfScreen;
+    const bottomBound = -this.halfScreen;
+
+    if (pos.y > topBound) {
+      pos.y = topBound;
+      this.fallSpeed = 0;
+    } else if (pos.y < bottomBound) {
+      pos.y = bottomBound;
+      this.fallSpeed = 0;
+    }
+
     this.node.setPosition(pos);
   }
 
