@@ -30,13 +30,13 @@ export class Pine extends Component {
   rotationTop: number = 0;
   rotationBot: number = 0;
 
+  gameControllerIns!: GameController;
+  onLoad() {
+    this.gameControllerIns = GameController.instance;
+  }
+
   public setUpAll(): void;
   public setUpAll(data: any): void;
-
-  // public setUpAll() {
-  //   this.setUpPinesDifficult();
-  //   this.setUpPine();
-  // }
 
   public setUpAll(data?: any): void {
     if (data) {
@@ -52,16 +52,16 @@ export class Pine extends Component {
       this.rotationBot = 0;
     }
 
-    this.setUpPine();    
+    this.setUpPine();
     this.addedPoint = false;
   }
 
   setUpPinesDifficult() {
     this.tempDifficultMoveSpeed =
-      GameController.instance.difficult_pineMoveSpeed;
-    this.tempDifficultGap = GameController.instance.difficult_gapPines;
+      this.gameControllerIns.difficult_pineMoveSpeed;
+    this.tempDifficultGap = this.gameControllerIns.difficult_gapPines;
     this.tempCurrentScore =
-      GameController.instance.resultController.currentScore;
+      this.gameControllerIns.resultController.currentScore;
     this.tempDifficultGap *= this.tempCurrentScore;
 
     let tempMin = this.gapHeightMax - this.tempCurrentScore;
@@ -98,15 +98,11 @@ export class Pine extends Component {
 
     if (this.node.position.x <= 0.1 && !this.addedPoint) {
       this.addedPoint = true;
-      GameController.instance.resultController.updateScore(1);
+      this.gameControllerIns.resultController.updateScore(1);
     }
 
     if (this.node.position.x <= -400) {
-      GameController.instance.despawnPine(this);
+      this.gameControllerIns.despawnPine(this);
     }
-  }
-
-  protected onLoad(): void {
-    console.log("_________On load Pine");
   }
 }

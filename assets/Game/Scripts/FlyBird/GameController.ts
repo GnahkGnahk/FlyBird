@@ -12,7 +12,6 @@
   instantiate,
   Vec3,
   view,
-  resources,
   JsonAsset,
 } from "cc";
 const { ccclass, property } = _decorator;
@@ -23,6 +22,7 @@ import { ResultController } from "./ResultController";
 import { Bird } from "./Bird";
 import { ObjectPool } from "./ObjectPool";
 import { Pine } from "./Pine";
+import { ItemController, ItemType } from "./ItemController";
 
 @ccclass("GameController")
 export class GameController extends SingletonBase<GameController> {
@@ -32,12 +32,16 @@ export class GameController extends SingletonBase<GameController> {
   public resultController!: ResultController;
   @property(Bird)
   public bird!: Bird;
+  @property(ItemController)
+  public itemController!: ItemController;
 
   @property(Node)
   public pineHolder!: Node;
   @property(Prefab)
   public pinePrefab: Prefab = null!;
   @property(CCInteger)
+  public maxSpawnInterval: number = 5;
+
   public spawnInterval: number = 1;
   private spawnTimer: number = 0;
 
@@ -121,7 +125,7 @@ export class GameController extends SingletonBase<GameController> {
 
   loadPineData() {
     this.pineDataList = this.pineDataAsset.json;
-    console.log("_____ Loaded Pine Data:", this.pineDataList);
+    //console.log("_____ Loaded Pine Data:", this.pineDataList);
   }
 
   gameOver() {
@@ -141,7 +145,7 @@ export class GameController extends SingletonBase<GameController> {
     const currentScore = this.resultController.currentScore;
     const newInterval = Math.max(
       this.minInterval,
-      1 - currentScore * this.difficult_spawnPineInterval
+      this.maxSpawnInterval - currentScore * this.difficult_spawnPineInterval
     );
     this.spawnInterval = newInterval;
 
@@ -172,12 +176,11 @@ export class GameController extends SingletonBase<GameController> {
 
     if (this.isCustomMap && this.pineDataList && this.pineDataList.length > 0) {
       const data = this.pineDataList[this.count];
-      console.log("_____Custom data : " + data);
-      
+      //console.log("_____Custom data : " + data);
+
       pine.setUpAll(data);
-      this.count = (this.count + 1) % this.pineDataList.length;     
-    } 
-    else {
+      this.count = (this.count + 1) % this.pineDataList.length;
+    } else {
       pine.setUpAll();
     }
   }
@@ -191,5 +194,34 @@ export class GameController extends SingletonBase<GameController> {
 
   public swapDayNight() {
     this.groundController.swapDayNight();
+  }
+
+  public get isImmortalActive(): boolean {
+    return this.itemController.isImmortalActive;
+  }
+
+  public hitItem() {
+    let itemType = this.itemController.onItemCollected();
+    switch (itemType) {
+      case ItemType.SCORE:
+        this.resultController.updateScore(2);
+        break;
+
+      case ItemType.IMMORTAL:
+        this.activeImmortalEffect(true);
+        break;
+
+      default:
+        console.warn("_____ Undefine item", itemType);
+        break;
+    }
+  }
+
+  public activeImmortalEffect(active: boolean) {
+    this.bird.activeImmortalEffect(active);
+  }
+
+  public getImmortalDuration(): number{
+    return this.itemController.immortalDuration;
   }
 }

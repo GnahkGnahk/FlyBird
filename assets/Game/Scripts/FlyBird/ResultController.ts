@@ -5,13 +5,13 @@ const { ccclass, property } = _decorator;
 @ccclass("ResultController")
 export class ResultController extends Component {
   @property(Label)
-  public currentScoreLabel: Label;
+  public currentScoreLabel!: Label;
   @property(Label)
-  public highScoreLabel: Label;
+  public highScoreLabel!: Label;
   @property(Label)
-  public notiLabel: Label;
+  public notiLabel!: Label;
   @property(Node)
-  public notiPanel: Node;
+  public notiPanel!: Node;
 
   maxScore: number = 0;
   currentScore: number = 0;
@@ -23,13 +23,12 @@ export class ResultController extends Component {
     this.highScoreLabel.string = "High score: " + high;
   }
 
-  updateScore(score: number) {
+  updateScore(score: number = 1) {
     if (score == 0) {
       this.currentScore = 0;
     } else {
       this.currentScore += score;
     }
-    console.log("Current Score: " + this.currentScore);
     this.currentScoreLabel.string = this.currentScore.toString();
 
     if (this.currentScore % GameController.instance.swapPoint == 0) {

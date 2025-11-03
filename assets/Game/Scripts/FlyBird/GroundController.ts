@@ -52,7 +52,6 @@ export class GroundController extends Component {
   }
 
   update(deltaTime: number) {
-    //console.log("Ground Update");
     this.ground1.setPosition(
       this.ground1.position.x - this.moveSpeed * deltaTime,
       0,

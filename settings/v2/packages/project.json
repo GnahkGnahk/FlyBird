@@ -19,6 +19,10 @@
     {
       "name": "Obstacle",
       "value": 2
+    },
+    {
+      "name": "Item",
+      "value": 4
     }
   ]
 }

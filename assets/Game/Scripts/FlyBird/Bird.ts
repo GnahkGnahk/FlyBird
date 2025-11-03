@@ -10,11 +10,16 @@
   IPhysics2DContact,
   ParticleSystem2D,
   AnimationState,
+  Layers,
 } from "cc";
 const { ccclass, property } = _decorator;
 
 import { GameController } from "./GameController";
 import { Utils } from "./Utils";
+
+const LAYER_PLAYER = 1 << 0; // Player  // 1
+const LAYER_OBSTACLE = 1 << 1; // Obstacle  // 2
+const LAYER_ITEM = 1 << 2; // Item  //  4
 
 @ccclass("Bird")
 export class Bird extends Component {
@@ -34,7 +39,10 @@ export class Bird extends Component {
 
   public hitSomeThing: boolean = false;
 
+  gameControllerIns!: GameController;
+
   start() {
+    this.gameControllerIns = GameController.instance;
     const collider = this.getComponent(Collider2D);
 
     if (collider) {
@@ -50,19 +58,21 @@ export class Bird extends Component {
     }
 
     this.runCoroutine(0.5);
+
+    this.particleDie.duration = this.gameControllerIns.getImmortalDuration();
   }
 
   update(deltaTime: number) {
-    if (!GameController.instance.startGame) {
+    if (!this.gameControllerIns.startGame) {
       return;
     }
     this.fall(deltaTime);
   }
 
   onAnimationFinished(type: string, state: AnimationState) {
-    console.log(`____🎬 Animation "${state.name}" FINISHED`);
+    //console.log(`____🎬 Animation "${state.name}" FINISHED`);
 
-    GameController.instance.gameOver();
+    this.gameControllerIns.gameOver();
   }
 
   onBeginContact(
@@ -70,9 +80,19 @@ export class Bird extends Component {
     otherCollider: Collider2D,
     contact: IPhysics2DContact | null
   ) {
-    console.log(`____Bird hit : ${otherCollider.node.name}`);
-    //this.particleDie.resetSystem();
-    this.explosiveAnimation.play();
+    const otherNode = otherCollider.node;
+    const otherLayer = otherNode.layer;
+
+    if (
+      otherLayer === LAYER_OBSTACLE &&
+      !this.gameControllerIns.isImmortalActive
+    ) {
+      console.log("_____ Hit obstacle!");
+      this.explosiveAnimation.play();
+    } else if (otherLayer === LAYER_ITEM) {
+      console.log("_____ Hit item!");
+      this.gameControllerIns.hitItem();
+    }
   }
 
   onLoad() {
@@ -85,6 +105,7 @@ export class Bird extends Component {
     this.node.setPosition(this.birdLocation);
     this.hitSomeThing = false;
     this.fallSpeed = 0;
+
   }
 
   fly() {
@@ -100,9 +121,9 @@ export class Bird extends Component {
     if (this.fallSpeed < -1) {
       this.node.setRotationFromEuler(0, 0, 10); //  up
     } else if (this.fallSpeed > 1) {
-      this.node.setRotationFromEuler(0, 0, -20);  // down
+      this.node.setRotationFromEuler(0, 0, -20); // down
     } else {
-      this.node.setRotationFromEuler(0, 0, 0);  //  balance
+      this.node.setRotationFromEuler(0, 0, 0); //  balance
     }
 
     // tăng dần tốc độ rơi theo thời gian (giả lập trọng lực)
@@ -115,9 +136,19 @@ export class Bird extends Component {
   }
 
   async runCoroutine(time: number = 1) {
-    while (!GameController.instance.startGame) {
+    while (!this.gameControllerIns.startGame) {
       await Utils.wait(time);
       this.birdAnimation.play();
+    }
+  }
+
+  public activeImmortalEffect(isActive: boolean) {
+    if (!this.particleDie) return;
+
+    if (isActive) {
+      this.particleDie.resetSystem();
+    } else {
+      this.particleDie.stopSystem();
     }
   }
 }
