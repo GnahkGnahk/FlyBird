@@ -24,6 +24,7 @@ import { Bird } from "./Bird";
 import { ObjectPool } from "./ObjectPool";
 import { Pine } from "./Pine";
 import { ItemController, ItemType } from "./ItemController";
+import { CameraShake } from "./CameraShake";
 
 @ccclass("GameController")
 export class GameController extends SingletonBase<GameController> {
@@ -35,6 +36,8 @@ export class GameController extends SingletonBase<GameController> {
   public bird!: Bird;
   @property(ItemController)
   public itemController!: ItemController;
+  @property(CameraShake)
+  public cameraShake!: CameraShake;
 
   @property(Node)
   public pineHolder!: Node;

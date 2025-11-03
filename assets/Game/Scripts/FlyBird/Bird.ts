@@ -89,11 +89,12 @@ export class Bird extends Component {
     const otherNode = otherCollider.node;
     const otherLayer = otherNode.layer;
 
-    if (
-      otherLayer === LAYER_OBSTACLE &&
-      !this.gameControllerIns.isImmortalActive
-    ) {
+    if (otherLayer === LAYER_OBSTACLE) {
       console.log("_____ Hit obstacle!");
+      if (this.gameControllerIns.isImmortalActive) {
+        this.gameControllerIns.cameraShake.shake();
+        return;
+      }
       this.explosiveAnimation.play();
     } else if (otherLayer === LAYER_ITEM) {
       console.log("_____ Hit item!");
