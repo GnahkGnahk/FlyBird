@@ -610,7 +610,6 @@
       "__id__": 19
     },
     "_enabled": true,
-    "__prefab": null,
     "groundController": {
       "__id__": 21
     },
@@ -1214,7 +1213,6 @@
       "__id__": 44
     },
     "_enabled": true,
-    "__prefab": null,
     "currentScoreLabel": {
       "__id__": 45
     },
@@ -1751,7 +1749,6 @@
       "__id__": 59
     },
     "_enabled": true,
-    "__prefab": null,
     "jumpHeight": 3.5,
     "jumpDuration": 3.5,
     "particleDie": {
@@ -2280,7 +2277,6 @@
       "__id__": 78
     },
     "_enabled": true,
-    "__prefab": null,
     "item": {
       "__id__": 80
     },
@@ -2292,8 +2288,14 @@
       "__uuid__": "dc4f8b8a-09fc-4c9b-99c4-61ec7106216a@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
+    "slowmotionSprite": {
+      "__uuid__": "9b1101c2-9810-4eef-863c-01779e1ead6f@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
     "spawnInterval": 3,
     "immortalDuration": 10,
+    "slowmotionDuration": 2,
+    "slowmotionTimeScale": 0.3,
     "_id": "a9dNKQivdH0Z1hTGbtMECQ"
   },
   {

@@ -8,6 +8,7 @@ import {
   Vec3,
   Sprite,
   SpriteFrame,
+  director,
 } from "cc";
 import { GameController } from "./GameController";
 const { ccclass, property } = _decorator;
@@ -15,6 +16,7 @@ const { ccclass, property } = _decorator;
 export enum ItemType {
   IMMORTAL,
   SCORE,
+  SLOWMOTION,
 }
 
 @ccclass("ItemController")
@@ -28,19 +30,32 @@ export class ItemController extends Component {
   @property(SpriteFrame)
   public scoreSprite!: SpriteFrame;
 
+  @property(SpriteFrame)
+  public slowmotionSprite!: SpriteFrame;
+
   @property(CCFloat)
   public spawnInterval: number = 3;
 
   @property(CCFloat)
   public immortalDuration: number = 5;
 
+  @property(CCFloat)
+  public slowmotionDuration: number = 2;
+  @property(CCFloat)
+  public slowmotionTimeScale: number = 0.3;
+
   private timer: number = 0;
   private isActive: boolean = false;
   private currentType: ItemType = ItemType.SCORE;
 
   // 🔹 Trạng thái / hiệu lực của item
+  //    Immortal
   public isImmortalActive: boolean = false;
   private immortalTimer: number = 0;
+
+  public isSlowmotionActive: boolean = false;
+  private slowmotionTimer: number = 0;
+  private defaultTimeScale: number = 1;
 
   start() {
     this.item.active = false;
@@ -59,8 +74,21 @@ export class ItemController extends Component {
       return; // return to not spawn item
     }
 
+    // Slow motion đang hoạt động
+    if (this.isSlowmotionActive) {
+      this.slowmotionTimer -= deltaTime;
+      if (this.slowmotionTimer <= 0) {
+        this.isSlowmotionActive = false;
+
+        const scheduler = director.getScheduler();
+        scheduler.setTimeScale(this.defaultTimeScale);
+
+        console.log("_____ End Slow Motion");
+      }
+    }
+
+    // to not spawn item when not start
     if (!GameController.instance.startGame) {
-      // to not spawn item when not start
       return;
     }
 
@@ -81,18 +109,23 @@ export class ItemController extends Component {
     this.isActive = true;
     this.item.active = true;
 
-    this.currentType =
-      math.randomRangeInt(0, 2) === 0 ? ItemType.IMMORTAL : ItemType.SCORE;
+    // Random item type: 0 - Immortal, 1 - Score, 2 - Slowmotion
+    this.currentType = math.randomRangeInt(2, 3);
 
-    // Gán sprite tương ứng
     const sprite = this.item.getComponent(Sprite);
     if (sprite) {
-      sprite.spriteFrame =
-        this.currentType === ItemType.IMMORTAL
-          ? this.immortalSprite
-          : this.scoreSprite;
+      switch (this.currentType) {
+        case ItemType.IMMORTAL:
+          sprite.spriteFrame = this.immortalSprite;
+          break;
+        case ItemType.SCORE:
+          sprite.spriteFrame = this.scoreSprite;
+          break;
+        case ItemType.SLOWMOTION:
+          sprite.spriteFrame = this.slowmotionSprite;
+          break;
+      }
     }
-
     // Random position spawn
     const screenH = view.getVisibleSize().height;
     const randomY = math.randomRange(-screenH / 4, screenH / 4);
@@ -109,15 +142,20 @@ export class ItemController extends Component {
       case ItemType.IMMORTAL:
         this.isImmortalActive = true;
         this.immortalTimer = this.immortalDuration;
-        console.log(
-          "_____ Player on Immortal",
-          this.immortalDuration,
-          "giây!"
-        );
+        console.log("_____ Player on Immortal", this.immortalDuration, "giây!");
         break;
 
       case ItemType.SCORE:
         console.log("_____ Player +2 Score");
+        break;
+      case ItemType.SLOWMOTION:
+        this.isSlowmotionActive = true;
+        this.slowmotionTimer = this.slowmotionDuration;
+        
+        const scheduler = director.getScheduler();
+        scheduler.setTimeScale(this.slowmotionTimeScale);
+
+        console.log(`_____ On Slowmotion ${this.slowmotionDuration}s`);
         break;
     }
 

@@ -237,7 +237,9 @@ export class GameController extends SingletonBase<GameController> {
       case ItemType.IMMORTAL:
         this.activeImmortalEffect(true);
         break;
-
+      case ItemType.SLOWMOTION:
+        //  slowmotion effect
+        break;
       default:
         console.warn("_____ Undefine item", itemType);
         break;
