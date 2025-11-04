@@ -36,8 +36,6 @@ export class GameController extends SingletonBase<GameController> {
   public bird!: Bird;
   @property(ItemController)
   public itemController!: ItemController;
-  @property(CameraShake)
-  public cameraShake!: CameraShake;
 
   @property(Node)
   public pineHolder!: Node;

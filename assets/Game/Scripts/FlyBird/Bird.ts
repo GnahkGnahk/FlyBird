@@ -17,6 +17,7 @@ const { ccclass, property } = _decorator;
 
 import { GameController } from "./GameController";
 import { Utils } from "./Utils";
+import { PageController } from "./PageController";
 
 const LAYER_PLAYER = 1 << 0; // Player  // 1
 const LAYER_OBSTACLE = 1 << 1; // Obstacle  // 2
@@ -93,7 +94,7 @@ export class Bird extends Component {
     if (otherLayer === LAYER_OBSTACLE) {
       console.log("_____ Hit obstacle!");
       if (this.gameControllerIns.isImmortalActive) {
-        this.gameControllerIns.cameraShake.shake();
+        PageController.instance.cameraShake.shake();
         return;
       }
       this.explosiveAnimation.play();

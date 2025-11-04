@@ -15,6 +15,7 @@ import {
   Widget,
 } from "cc";
 import { SingletonBase } from "./SingletonBase";
+import { CameraShake } from "./CameraShake";
 
 const { ccclass, property } = _decorator;
 
@@ -29,6 +30,8 @@ export class PageController extends SingletonBase<PageController> {
   pageContainer!: Node;
   @property([Prefab])
   prefabPages: Prefab[] = [];
+  @property(CameraShake)
+  public cameraShake!: CameraShake;
 
   private uiTransform!: UITransform;
   private currentPage!: Node;
