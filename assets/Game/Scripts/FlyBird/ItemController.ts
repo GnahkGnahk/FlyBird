@@ -110,7 +110,7 @@ export class ItemController extends Component {
     this.item.active = true;
 
     // Random item type: 0 - Immortal, 1 - Score, 2 - Slowmotion
-    this.currentType = math.randomRangeInt(2, 3);
+    this.currentType = math.randomRangeInt(0, 2);
 
     const sprite = this.item.getComponent(Sprite);
     if (sprite) {

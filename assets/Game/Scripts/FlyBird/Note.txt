@@ -1,0 +1,12 @@
+HomeScene chứa các page và , cần xài thì instantiate 
+
+Các page và subPage đều được extend từ các base tương ứng
+
+------------------------------------------------------
+Nhiệm vụ cần làm
+
+Add 1 cái PageController
+Add 1 basePage
+    - Start Page: Play, exit btn
+    - Play Page: Gameplay
+Add 1 popup game over

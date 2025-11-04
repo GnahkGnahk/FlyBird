@@ -72,6 +72,7 @@ export class Bird extends Component {
     if (!this.gameControllerIns.startGame) {
       return;
     }
+    
     this.fall(deltaTime);
   }
 
