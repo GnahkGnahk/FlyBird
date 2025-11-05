@@ -151,7 +151,7 @@ export class ItemController extends Component {
       case ItemType.SLOWMOTION:
         this.isSlowmotionActive = true;
         this.slowmotionTimer = this.slowmotionDuration;
-        
+
         const scheduler = director.getScheduler();
         scheduler.setTimeScale(this.slowmotionTimeScale);
 
@@ -167,5 +167,9 @@ export class ItemController extends Component {
     this.item.active = false;
     this.isActive = false;
     this.timer = 0;
+  }
+
+  getImmortalDuration(): number {
+    return this.immortalDuration;
   }
 }
