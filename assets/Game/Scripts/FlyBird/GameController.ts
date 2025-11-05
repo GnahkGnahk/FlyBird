@@ -249,6 +249,6 @@ export class GameController extends SingletonBase<GameController> {
   }
 
   public getImmortalDuration(): number {
-    return this.itemController.immortalDuration;
+    return this.itemController.getImmortalDuration();
   }
 }

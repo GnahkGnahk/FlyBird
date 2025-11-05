@@ -45,6 +45,8 @@ export class Bird extends Component {
 
   halfScreen!: number;
 
+  immortalDuration: number = 0;
+
   start() {
     this.gameControllerIns = GameController.instance;
     const collider = this.getComponent(Collider2D);
@@ -63,18 +65,22 @@ export class Bird extends Component {
 
     this.runCoroutine(0.5);
 
-    this.particleDie.duration = this.gameControllerIns.getImmortalDuration();
-
     const screenHeight = view.getVisibleSize().height;
     this.halfScreen = screenHeight / 2;
+    this.immortalDuration =
+      this.gameControllerIns.itemController.getImmortalDuration();
+    this.particleDie.duration = this.immortalDuration;
   }
 
   update(deltaTime: number) {
     if (!this.gameControllerIns.startGame) {
       return;
     }
-    
+
     this.fall(deltaTime);
+
+    //particleImmortal
+    // have immortalDuration,
   }
 
   onAnimationFinished(type: string, state: AnimationState) {
@@ -165,8 +171,37 @@ export class Bird extends Component {
 
     if (isActive) {
       this.particleDie.resetSystem();
+
+      this.startImmortalScheduler();
     } else {
       this.particleDie.stopSystem();
     }
+  }
+  private async startImmortalScheduler() {
+    let remain = this.immortalDuration;
+    const interval = 0.5; // mỗi 0.5s giảm 1 lần
+
+    while (this.isImmortalActive && remain > 0) {
+      remain -= interval;
+      const ratio = Math.max(0, remain / this.immortalDuration);
+
+      // giảm emission dần theo tỉ lệ
+      if (this.particleDie) {
+        this.particleDie.emissionRate = this.baseEmissionRate * ratio;
+      }
+
+      // chờ 0.5s
+      await this.wait(interval);
+    }
+
+    // hết thời gian -> tắt hiệu ứng
+    this.activeImmortalEffect(false);
+  }
+
+  // helper: đợi x giây (cách chuẩn trong Cocos/TS)
+  private async wait(seconds: number) {
+    return new Promise<void>((resolve) => {
+      director.getScheduler().scheduleOnce(resolve, seconds);
+    });
   }
 }
